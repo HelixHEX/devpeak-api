@@ -153,48 +153,6 @@ def update_liked_posts(_id, user_id):
             return {"success": False, "message": "Post not found"}
     else:
         return {"success": False, "message": "User not found"}
-    return {"success": True}
-    # if user:
-    #     global already_liked
-    #     liked_posts = list(user['liked_posts'])
-    #     already_liked = False
-    #     post = posts.find_one({'_id': ObjectId(_id)})
-    #     if post:
-    #         for liked_post in liked_posts:
-    #             print(liked_post)
-    #             # if liked_post == _id:
-    #             #     already_liked = True
-    #         print(f"{user_id} - {liked_posts}")
-    #         # if already_liked:
-    #         #     posts.update_one(
-    #         #         {'_id': ObjectId(_id)},
-    #         #         {'$set': {'likes': post['likes'] - 1}}
-    #         #     )
-    #         #     # post['likes'] = post['likes'] - 1
-    #         #     print('removing')
-    #         #     liked_posts.remove(_id)
-    #         # else:
-    #         #     posts.update_one(
-    #         #         {'_id': ObjectId(_id)},
-    #         #         {'$set': {'likes': post['likes'] + 1}}
-    #         #     )
-    #         #     # post['likes'] = post['likes'] + 1
-    #         #     liked_posts.append(_id)
-    #         #     print(len(liked_posts))
-    #         # users.update_one(
-    #         #     {'_id': ObjectId(user_id)},
-    #         #     {'$set': {'liked_posts': liked_posts}}
-    #         # )
-    #         # user['liked_posts'] = liked_posts
-
-    #         return {"success": True}
-    #     else:
-    #         print("post not found")
-    #         return {"success": False, "message": "Post not found"}
-    # else:
-    #     print('user not found')
-    #     return {"success": False, "message": "User not found"}
-
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

@@ -108,6 +108,13 @@ def all_posts(_id):
         all_posts = dumps(posts.find().sort([['_id', -1]]))
         return {"success": True, "posts": all_posts, "liked_posts": user['liked_posts']}
 
+@app.route('created-posts/<_id>', methods=['GET'])
+@cross_origin()
+def created_posts(_id):
+    user = users.find_one({'_id': ObjectId(_id)})
+    if user: 
+        all_posts = dumps(posts.find({'user_id': ObjectId(_id)}).sort([['_id', -1]]))
+        return {"success": True, "posts": all_posts, "liked_posts": user['liked_posts']}
 
 @app.route('/delete-post/<_id>/<user_id>', methods=['DELETE'])
 @cross_origin()

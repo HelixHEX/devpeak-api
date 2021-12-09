@@ -1,11 +1,9 @@
-from re import U
 from flask import Flask, session, request
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import os
 import bcrypt
 from bson.json_util import dumps
-import json
 
 host = os.environ.get("DATABASE_URL")
 client = MongoClient(host=host)
@@ -26,9 +24,10 @@ def index():
 def login():
     content = request.json
     user = users.find_one({'username': content['username']})
-    user_password = user['password']
-    password = f"{content['password']}"
+
     if user:
+        user_password = user['password']
+        password = f"{content['password']}"
         if bcrypt.checkpw(password.encode('utf-8'), user_password):
             return {"success": True, "_id": str(user['_id']), "name": user['name']}
         else:
@@ -153,6 +152,7 @@ def update_liked_posts(_id, user_id):
             return {"success": False, "message": "Post not found"}
     else:
         return {"success": False, "message": "User not found"}
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

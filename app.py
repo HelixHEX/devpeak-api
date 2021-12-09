@@ -78,6 +78,7 @@ def all_users():
 @cross_origin()
 def new_post():
     content = request.json
+    print(content['text'])
     if content['text'] == "console_default":
         text = "console.log(\"hello world\")"
     else:

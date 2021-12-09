@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 import os
 import bcrypt
+from flask_cors import CORS, cross_origin
 from bson.json_util import dumps
 
 host = os.environ.get("DATABASE_URL")
@@ -13,6 +14,8 @@ posts = db.posts
 comments = db.comments
 
 app = Flask(__name__)
+# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.route('/')
@@ -21,6 +24,7 @@ def index():
 
 
 @app.route('/login', methods=['POST'])
+# @cross_origin()
 def login():
     content = request.json
     user = users.find_one({'username': content['username']})
@@ -37,6 +41,7 @@ def login():
 
 
 @app.route('/signup', methods=['POST'])
+@cross_origin()
 def signup():
     content = request.json
     check_username = users.find_one({'username': content['username']})
@@ -56,10 +61,12 @@ def signup():
             'liked_posts': []
         }
         users.insert_one(new_user)
-        return {"success": True}
+        user = users.find_one({'username': content['username']})
+        return {"success": True, "_id": str(user['_id']), "name": user['name']}
 
 
 @app.route('/all-users', methods=['GET'])
+@cross_origin()
 def all_users():
     many_users = users.find()
     print(many_users)
@@ -68,6 +75,7 @@ def all_users():
 
 
 @app.route('/post', methods=['POST'])
+@cross_origin()
 def new_post():
     content = request.json
     text = content['text']
@@ -88,6 +96,7 @@ def new_post():
 
 
 @app.route('/all-posts/<_id>', methods=['GET'])
+@cross_origin()
 def all_posts(_id):
     user = users.find_one({'_id': ObjectId(_id)})
     if user:
@@ -96,6 +105,7 @@ def all_posts(_id):
 
 
 @app.route('/delete-post/<_id>/<user_id>', methods=['DELETE'])
+@cross_origin()
 def delete_post(_id, user_id):
     print(user_id)
     user = users.find_one({'_id': ObjectId(user_id)})
@@ -118,6 +128,7 @@ def delete_post(_id, user_id):
 
 
 @app.route('/update-liked-post/<_id>/<user_id>', methods=['PUT'])
+@cross_origin()
 def update_liked_posts(_id, user_id):
     user = users.find_one({'_id': ObjectId(user_id)})
     if user:

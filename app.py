@@ -79,7 +79,7 @@ def all_users():
 def new_post():
     content = request.json
     print(content['text'])
-    if content['text'] == "console_default":
+    if str(content['text']) == "console_default":
         text = "console.log(\"hello world\")"
     else:
         text = content['text']

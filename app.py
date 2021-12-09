@@ -78,6 +78,10 @@ def all_users():
 @cross_origin()
 def new_post():
     content = request.json
+    if content['text'] == "console_default":
+        text = "console.log(\"hello world\")"
+    else:
+        text = content['text']
     text = content['text']
     _id = content['_id']
     user = users.find_one({'_id': ObjectId(_id)})

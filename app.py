@@ -108,13 +108,33 @@ def all_posts(_id):
         all_posts = dumps(posts.find().sort([['_id', -1]]))
         return {"success": True, "posts": all_posts, "liked_posts": user['liked_posts']}
 
-@app.route('created-posts/<_id>', methods=['GET'])
+@app.route('/created-posts/<_id>', methods=['GET'])
 @cross_origin()
 def created_posts(_id):
     user = users.find_one({'_id': ObjectId(_id)})
     if user: 
-        all_posts = dumps(posts.find({'user_id': ObjectId(_id)}).sort([['_id', -1]]))
+        all_posts = dumps(posts.find({'user_id': _id}).sort([['_id', -1]]))
+        print(all_posts)
         return {"success": True, "posts": all_posts, "liked_posts": user['liked_posts']}
+    else:
+        print('user not found')
+        return {"success": False, "message": "User not found"}
+
+@app.route('/liked-posts/<_id>', methods=['GET'])
+@cross_origin()
+def liked_posts(_id):
+    user = users.find_one({'_id': ObjectId(_id)})
+    if user: 
+        all_posts = list()
+        for post_id in user['liked_posts']:
+            post = posts.find_one({'_id': ObjectId(post_id)})
+            all_posts.append(post)
+        print(all_posts)
+        all_posts = dumps(all_posts)
+        return {"success": True, "posts": all_posts, "liked_posts": user['liked_posts']}
+    else:
+        print('user not found')
+        return {"success": False, "message": "User not found"}
 
 @app.route('/delete-post/<_id>/<user_id>', methods=['DELETE'])
 @cross_origin()
